@@ -4,46 +4,36 @@ namespace App\Http\Controllers\Api\V1\Product;
 
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Api\Controller;
+use App\Services\Product\Contracts\ProductServiceInterface;
+use App\Http\Requests\Product\ProductUpdateRequest;
 
 class ProductController extends Controller
 {
     /**
-     * @return JsonResponse
+     * @var ProductServiceInterface
      */
-    public function index(): JsonResponse
+    private $productService;
+
+    /**
+     * @param ProductServiceInterface $productService
+     *
+     * @return void
+     */
+    public function __construct(ProductServiceInterface $productService)
     {
-        return $this->responseAdapter(['code' => 200]);
+        $this->productService = $productService;
     }
 
     /**
+     * @param ProductUpdateRequest $request
+     * @param int $id
+     *
      * @return JsonResponse
      */
-    public function store(): JsonResponse
+    public function update(ProductUpdateRequest $request, int $id): JsonResponse
     {
-        return $this->responseAdapter(['code' => 200]);
-    }
+        $response = $this->productService->update($id, $request->all());
 
-    /**
-     * @return JsonResponse
-     */
-    public function show(): JsonResponse
-    {
-        return $this->responseAdapter(['code' => 200]);
-    }
-
-    /**
-     * @return JsonResponse
-     */
-    public function update(): JsonResponse
-    {
-        return $this->responseAdapter(['code' => 200]);
-    }
-
-    /**
-     * @return JsonResponse
-     */
-    public function destroy(): JsonResponse
-    {
-        return $this->responseAdapter(['code' => 200]);
+        return $this->responseAdapter($response);
     }
 }
