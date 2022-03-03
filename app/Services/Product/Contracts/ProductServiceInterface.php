@@ -7,7 +7,14 @@ interface ProductServiceInterface
     /**
      * @return array
      */
-    public function getAll(): array;
+    public function getAllProducts(): array;
+
+    /**
+     * @param int $id
+     *
+     * @return array
+     */
+    public function getProduct(int $id): array;
 
     /**
      * @param int $id
@@ -15,5 +22,5 @@ interface ProductServiceInterface
      *
      * @return array
      */
-    public function update(int $id, array $data): array;
+    public function updateProduct(int $id, array $data): array;
 }

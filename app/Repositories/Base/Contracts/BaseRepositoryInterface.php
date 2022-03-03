@@ -11,4 +11,11 @@ interface BaseRepositoryInterface
      * @return Collection
      */
     public function get(): Collection;
+
+    /**
+     * @param int $id
+     *
+     * @return Model
+     */
+    public function findOrFail(int $id): ?Model;
 }

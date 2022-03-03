@@ -4,7 +4,6 @@ namespace Tests\Integration\app\Http\Controllers\Api\V1\Product\ProductControlle
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Testing\Fluent\AssertableJson;
 use App\Models\Product;
 use App\Http\Resources\Product\ProductResource;
 use App\Constants\HttpStatusConstant;

@@ -2,6 +2,8 @@
 
 namespace App\Services\Product;
 
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Services\Product\Contracts\ProductServiceInterface;
 use App\Repositories\Product\Contracts\ProductRepositoryInterface;
 use App\Http\Resources\Product\ProductResource;
@@ -27,15 +29,46 @@ class ProductService implements ProductServiceInterface
     /**
      * @return array
      */
-    public function getAll(): array
+    public function getAllProducts(): array
     {
-        $data = $this->productRepository->get();
-        $data = ProductResource::collection($data);
+        $products = $this->productRepository->get();
+        $products = ProductResource::collection($products);
 
         return [
             'code' => HttpStatusConstant::OK,
-            'data' => $data,
+            'data' => $products,
         ];
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return array
+     */
+    public function getProduct(int $id): array
+    {
+        try {
+            $product = $this->productRepository->findOrFail($id);
+            $product = new ProductResource($product);
+
+            return [
+                'code' => HttpStatusConstant::OK,
+                'data' => $product,
+            ];
+        } catch (Exception $e) {
+            switch (get_class($e)) {
+                case ModelNotFoundException::class:
+                    return [
+                        'code'    => HttpStatusConstant::NOT_FOUND,
+                        'message' => trans('messages.not_found', ['attribute' => 'Product']),
+                    ];
+                default:
+                    return [
+                        'code'    => HttpStatusConstant::INTERNAL_SERVER_ERROR,
+                        'message' => trans('messages.internal_server_error'),
+                    ];
+            }
+        }
     }
 
     /**
@@ -44,7 +77,7 @@ class ProductService implements ProductServiceInterface
      *
      * @return array
      */
-    public function update(int $id, array $data): array
+    public function updateProduct(int $id, array $data): array
     {
         return ['code' => HttpStatusConstant::OK];
     }

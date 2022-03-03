@@ -29,7 +29,19 @@ class ProductController extends Controller
      */
     public function index(): JsonResponse
     {
-        $response = $this->productService->getAll();
+        $response = $this->productService->getAllProducts();
+
+        return $this->responseAdapter($response);
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return JsonResponse
+     */
+    public function show(int $id): JsonResponse
+    {
+        $response = $this->productService->getProduct($id);
 
         return $this->responseAdapter($response);
     }
@@ -42,7 +54,7 @@ class ProductController extends Controller
      */
     public function update(ProductUpdateRequest $request, int $id): JsonResponse
     {
-        $response = $this->productService->update($id, $request->all());
+        $response = $this->productService->updateProduct($id, $request->all());
 
         return $this->responseAdapter($response);
     }
