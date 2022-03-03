@@ -25,6 +25,16 @@ class ProductController extends Controller
     }
 
     /**
+     * @return JsonResponse
+     */
+    public function index(): JsonResponse
+    {
+        $response = $this->productService->getAll();
+
+        return $this->responseAdapter($response);
+    }
+
+    /**
      * @param ProductUpdateRequest $request
      * @param int $id
      *

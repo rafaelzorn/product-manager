@@ -19,5 +19,5 @@ Route::prefix('v1/')->group(function () {
     $exceptActions = ['create', 'edit'];
 
     # PRODUCT
-    Route::resource('produtos', ProductController::class)->except($exceptActions);
+    Route::resource('products', ProductController::class)->except($exceptActions);
 });
