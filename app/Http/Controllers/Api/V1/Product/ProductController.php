@@ -58,4 +58,16 @@ class ProductController extends Controller
 
         return $this->responseAdapter($response);
     }
+
+    /**
+     * @param int $id
+     *
+     * @return JsonResponse
+     */
+    public function destroy(int $id): JsonResponse
+    {
+        $response = $this->productService->deleteProduct($id);
+
+        return $this->responseAdapter($response);
+    }
 }

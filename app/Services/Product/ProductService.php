@@ -81,4 +81,34 @@ class ProductService implements ProductServiceInterface
     {
         return ['code' => HttpStatusConstant::OK];
     }
+
+    /**
+     * @param int $id
+     *
+     * @return array
+     */
+    public function deleteProduct(int $id): array
+    {
+        try {
+            $this->productRepository->findOrFail($id)->delete();
+
+            return [
+                'code'    => HttpStatusConstant::OK,
+                'message' => trans('messages.record_removed', ['attribute' => 'Product']),
+            ];
+        } catch (Exception $e) {
+            switch (get_class($e)) {
+                case ModelNotFoundException::class:
+                    return [
+                        'code'    => HttpStatusConstant::NOT_FOUND,
+                        'message' => trans('messages.not_found', ['attribute' => 'Product']),
+                    ];
+                default:
+                    return [
+                        'code'    => HttpStatusConstant::INTERNAL_SERVER_ERROR,
+                        'message' => trans('messages.internal_server_error'),
+                    ];
+            }
+        }
+    }
 }

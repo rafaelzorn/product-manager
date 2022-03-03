@@ -5,10 +5,9 @@ namespace Tests\Integration\app\Http\Controllers\Api\V1\Product\ProductControlle
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Product;
-use App\Http\Resources\Product\ProductResource;
 use App\Constants\HttpStatusConstant;
 
-class ShowTest extends TestCase
+class DestroyTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -19,20 +18,19 @@ class ShowTest extends TestCase
      *
      * @return void
      */
-    public function should_return_product(): void
+    public function should_delete_product(): void
     {
         // Arrange
         $data = Product::factory()->forCategory()->create();
-        $data = new ProductResource($data);
 
         // Act
-        $response = $this->getJson(self::ENDPOINT . $data->id);
+        $response = $this->deleteJson(self::ENDPOINT . $data->id);
 
         // Assert
         $response->assertStatus(HttpStatusConstant::OK);
         $response->assertExactJson([
-            'code' => HttpStatusConstant::OK,
-            'data' => $data->resolve(),
+            'code'    => HttpStatusConstant::OK,
+            'message' => trans('messages.record_removed', ['attribute' => 'Product']),
         ]);
     }
 
@@ -44,10 +42,10 @@ class ShowTest extends TestCase
     public function should_return_product_not_found(): void
     {
         // Arrange
-        $nonExistingProductId = 12;
+        $nonExistingProductId = 18;
 
         // Act
-        $response = $this->getJson(self::ENDPOINT . $nonExistingProductId);
+        $response = $this->deleteJson(self::ENDPOINT . $nonExistingProductId);
 
         // Assert
         $response->assertStatus(HttpStatusConstant::NOT_FOUND);
