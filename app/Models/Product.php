@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\Category;
 use Database\Factories\Product\ProductFactory;
 
@@ -33,7 +34,6 @@ class Product extends Model
      * @var array
      */
     protected $hidden = [
-        'id',
         'category_id',
         'created_at',
         'updated_at',
@@ -72,5 +72,16 @@ class Product extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * @param Builder $query
+     * @param int $id
+     *
+     * @return Builder
+     */
+    public function scopeWhereById(Builder $query, int $id): Builder
+    {
+        return $query->where('id', $id);
     }
 }

@@ -28,7 +28,7 @@ class IndexTest extends TestCase
                     ->count($count)
                     ->create();
 
-        $data = ProductResource::collection($data)->resolve();
+        $dataResource = ProductResource::collection($data)->resolve();
 
         // Act
         $response = $this->getJson(self::ENDPOINT);
@@ -38,7 +38,7 @@ class IndexTest extends TestCase
         $response->assertJsonCount($count, 'data');
         $response->assertExactJson([
             'code' => HttpStatusConstant::OK,
-            'data' => $data,
+            'data' => $dataResource,
         ]);
     }
 }

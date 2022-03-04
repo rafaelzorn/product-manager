@@ -42,7 +42,7 @@ class DestroyTest extends TestCase
     public function should_return_product_not_found(): void
     {
         // Arrange
-        $nonExistingProductId = 18;
+        $nonExistingProductId = rand(1000, 3000);
 
         // Act
         $response = $this->deleteJson(self::ENDPOINT . $nonExistingProductId);

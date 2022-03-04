@@ -79,7 +79,28 @@ class ProductService implements ProductServiceInterface
      */
     public function updateProduct(int $id, array $data): array
     {
-        return ['code' => HttpStatusConstant::OK];
+        try {
+            $product = $this->productRepository->updateProduct($id, $data);
+            $product = new ProductResource($product);
+
+            return [
+                'code' => HttpStatusConstant::OK,
+                'data' => $product,
+            ];
+        } catch (Exception $e) {
+            switch (get_class($e)) {
+                case ModelNotFoundException::class:
+                    return [
+                        'code'    => HttpStatusConstant::NOT_FOUND,
+                        'message' => trans('messages.not_found', ['attribute' => 'Product']),
+                    ];
+                default:
+                    return [
+                        'code'    => HttpStatusConstant::INTERNAL_SERVER_ERROR,
+                        'message' => trans('messages.internal_server_error'),
+                    ];
+            }
+        }
     }
 
     /**

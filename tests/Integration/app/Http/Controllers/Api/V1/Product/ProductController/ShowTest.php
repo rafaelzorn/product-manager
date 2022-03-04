@@ -22,8 +22,8 @@ class ShowTest extends TestCase
     public function should_return_product(): void
     {
         // Arrange
-        $data = Product::factory()->forCategory()->create();
-        $data = new ProductResource($data);
+        $data         = Product::factory()->forCategory()->create();
+        $dataResource = new ProductResource($data);
 
         // Act
         $response = $this->getJson(self::ENDPOINT . $data->id);
@@ -32,7 +32,7 @@ class ShowTest extends TestCase
         $response->assertStatus(HttpStatusConstant::OK);
         $response->assertExactJson([
             'code' => HttpStatusConstant::OK,
-            'data' => $data->resolve(),
+            'data' => $dataResource->resolve(),
         ]);
     }
 
@@ -44,7 +44,7 @@ class ShowTest extends TestCase
     public function should_return_product_not_found(): void
     {
         // Arrange
-        $nonExistingProductId = 12;
+        $nonExistingProductId = rand(1000, 3000);
 
         // Act
         $response = $this->getJson(self::ENDPOINT . $nonExistingProductId);

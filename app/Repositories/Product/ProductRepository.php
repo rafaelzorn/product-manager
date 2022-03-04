@@ -17,4 +17,19 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     {
         $this->model = $product;
     }
+
+    /**
+     * @param int $id
+     * @param array $data
+     *
+     * @return Product
+     */
+    public function updateProduct(int $id, array $data): Product
+    {
+        $product = $this->model->whereById($id)->firstOrFail();
+
+        $product->update($data);
+
+        return $product;
+    }
 }
