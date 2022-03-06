@@ -176,7 +176,38 @@ class UpdateTest extends TestCase
         $this->assertEquals($this->validationMessages($validations), $response->getContent());
     }
 
-    // TODO Rafael Zorn 04/03/22: Test regex price
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function should_return_validation_of_price_field(): void
+    {
+        // Arrange
+        $data         = Product::factory()->forCategory()->create();
+        $dataToUpdate = ProductHelper::productFaker();
+
+        $validations = [
+            'price' => trans('validation.regex'),
+        ];
+
+        $prices = [
+            'a',
+            10.001,
+            2010.011,
+        ];
+
+        foreach ($prices as $price) {
+            $dataToUpdate->price = $price;
+
+            // Act
+            $response = $this->putJson(self::ENDPOINT . $data->id, $dataToUpdate->getAttributes());
+
+            // Assert
+            $response->assertStatus(HttpStatusConstant::UNPROCESSABLE_ENTITY);
+            $this->assertEquals($this->validationMessages($validations), $response->getContent());
+        }
+    }
 
     /**
      * @test
