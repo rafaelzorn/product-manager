@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\Product;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Api\Controller;
 use App\Services\Product\Contracts\ProductServiceInterface;
+use App\Http\Requests\Product\ProductStoreRequest;
 use App\Http\Requests\Product\ProductUpdateRequest;
 
 class ProductController extends Controller
@@ -30,6 +31,18 @@ class ProductController extends Controller
     public function index(): JsonResponse
     {
         $response = $this->productService->getAllProducts();
+
+        return $this->responseAdapter($response);
+    }
+
+    /**
+     * @param ProductStoreRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function store(ProductStoreRequest $request): JsonResponse
+    {
+        $response = $this->productService->importProducts($request->spreadsheet);
 
         return $this->responseAdapter($response);
     }

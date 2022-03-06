@@ -3,6 +3,7 @@
 namespace App\Services\Product;
 
 use Exception;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Services\Product\Contracts\ProductServiceInterface;
 use App\Repositories\Product\Contracts\ProductRepositoryInterface;
@@ -37,6 +38,19 @@ class ProductService implements ProductServiceInterface
         return [
             'code' => HttpStatusConstant::OK,
             'data' => $products,
+        ];
+    }
+
+    /**
+     * @param UploadedFile $spreadsheet
+     *
+     * @return array
+     */
+    public function importProducts(UploadedFile $spreadsheet): array
+    {
+        return [
+            'code'    => HttpStatusConstant::OK,
+            'message' => '',
         ];
     }
 
