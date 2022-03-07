@@ -9,6 +9,7 @@ use App\Services\Product\Contracts\ProductServiceInterface;
 use App\Repositories\Product\Contracts\ProductRepositoryInterface;
 use App\Http\Resources\Product\ProductResource;
 use App\Constants\HttpStatusConstant;
+use App\Constants\StoragePathConstant;
 
 class ProductService implements ProductServiceInterface
 {
@@ -48,12 +49,27 @@ class ProductService implements ProductServiceInterface
      */
     public function importProducts(UploadedFile $spreadsheet): array
     {
-        // TODO
+        try {
+            $originalFileName = $spreadsheet->getClientOriginalName();
+            $storedFileName   = $spreadsheet->store(StoragePathConstant::IMPORTED_SPREADSHEETS);
 
-        return [
-            'code'    => HttpStatusConstant::OK,
-            'message' => '',
-        ];
+            // TODO
+
+            $data = [
+                'endpoint_spreadsheet_processing_status' => '',
+            ];
+
+            return [
+                'code'    => HttpStatusConstant::OK,
+                'data'    => $data,
+                'message' => trans('messages.spreadsheet_sent_for_processing'),
+            ];
+        } catch (Exception $e) {
+            return [
+                'code'    => HttpStatusConstant::INTERNAL_SERVER_ERROR,
+                'message' => trans('messages.internal_server_error'),
+            ];
+        }
     }
 
     /**
