@@ -24,7 +24,7 @@ class ProductStoreRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'spreadsheet' => 'required',
+            'spreadsheet' => 'required|mimes:xlsx',
         ];
     }
 }
