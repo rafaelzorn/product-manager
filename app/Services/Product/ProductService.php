@@ -5,8 +5,10 @@ namespace App\Services\Product;
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Models\ProcessedFile;
 use App\Services\Product\Contracts\ProductServiceInterface;
 use App\Repositories\Product\Contracts\ProductRepositoryInterface;
+use App\Repositories\ProcessedFile\Contracts\ProcessedFileRepositoryInterface;
 use App\Http\Resources\Product\ProductResource;
 use App\Constants\HttpStatusConstant;
 use App\Constants\StoragePathConstant;
@@ -19,13 +21,22 @@ class ProductService implements ProductServiceInterface
     private $productRepository;
 
     /**
+     * @var ProcessedFileRepositoryInterface
+     */
+    private $processedFileRepository;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      *
      * @return void
      */
-    public function __construct(ProductRepositoryInterface $productRepository)
+    public function __construct(
+        ProductRepositoryInterface $productRepository,
+        ProcessedFileRepositoryInterface $processedFileRepository
+    )
     {
-        $this->productRepository = $productRepository;
+        $this->productRepository       = $productRepository;
+        $this->processedFileRepository = $processedFileRepository;
     }
 
     /**
@@ -53,10 +64,15 @@ class ProductService implements ProductServiceInterface
             $originalFileName = $spreadsheet->getClientOriginalName();
             $storedFileName   = $spreadsheet->store(StoragePathConstant::IMPORTED_SPREADSHEETS);
 
-            // TODO
+            $processedFile = $this->processedFileRepository->create([
+                'original_filename' => $originalFileName,
+                'stored_filename'   => $storedFileName
+            ]);
+
+            $this->dispatchProcessing($processedFile);
 
             $data = [
-                'endpoint_spreadsheet_processing_status' => '',
+                'endpoint_spreadsheet_processing_status' => $processedFile->id,
             ];
 
             return [
@@ -163,5 +179,15 @@ class ProductService implements ProductServiceInterface
                     ];
             }
         }
+    }
+
+    /**
+     * @param ProcessedFile $processedFile
+     *
+     * @return void
+     */
+    private function dispatchProcessing(ProcessedFile $processedFile): void
+    {
+        //
     }
 }

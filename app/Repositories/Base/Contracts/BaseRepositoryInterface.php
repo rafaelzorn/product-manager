@@ -19,4 +19,11 @@ interface BaseRepositoryInterface
      * @return Model|ModelNotFoundException
      */
     public function findOrFail(int $id): Model|ModelNotFoundException;
+
+    /**
+     * @param array $attributes
+     *
+     * @return Model
+     */
+    public function create(array $attributes): Model;
 }
