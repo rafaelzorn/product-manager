@@ -5,13 +5,11 @@ namespace App\Services\Product;
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Models\ProcessedFile;
 use App\Services\Product\Contracts\ProductServiceInterface;
+use App\Services\ProcessSpreadsheet\Contracts\ProcessSpreadsheetServiceInterface;
 use App\Repositories\Product\Contracts\ProductRepositoryInterface;
-use App\Repositories\ProcessedFile\Contracts\ProcessedFileRepositoryInterface;
 use App\Http\Resources\Product\ProductResource;
 use App\Constants\HttpStatusConstant;
-use App\Constants\StoragePathConstant;
 
 class ProductService implements ProductServiceInterface
 {
@@ -21,22 +19,23 @@ class ProductService implements ProductServiceInterface
     private $productRepository;
 
     /**
-     * @var ProcessedFileRepositoryInterface
+     * @var ProcessSpreadsheetServiceInterface
      */
-    private $processedFileRepository;
+    private $processSpreadsheetService;
 
     /**
      * @param ProductRepositoryInterface $productRepository
+     * @param ProcessSpreadsheetServiceInterface $processSpreadsheetService
      *
      * @return void
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        ProcessedFileRepositoryInterface $processedFileRepository
+        ProcessSpreadsheetServiceInterface $processSpreadsheetService
     )
     {
-        $this->productRepository       = $productRepository;
-        $this->processedFileRepository = $processedFileRepository;
+        $this->productRepository         = $productRepository;
+        $this->processSpreadsheetService = $processSpreadsheetService;
     }
 
     /**
@@ -61,18 +60,11 @@ class ProductService implements ProductServiceInterface
     public function importProducts(UploadedFile $spreadsheet): array
     {
         try {
-            $originalFileName = $spreadsheet->getClientOriginalName();
-            $storedFileName   = $spreadsheet->store(StoragePathConstant::IMPORTED_SPREADSHEETS);
-
-            $processedFile = $this->processedFileRepository->create([
-                'original_filename' => $originalFileName,
-                'stored_filename'   => $storedFileName
-            ]);
-
-            $this->dispatchProcessing($processedFile);
+            $processedFile = $this->processSpreadsheetService->process($spreadsheet);
+            $endpoint      = route('processed-files.show', ['id' => $processedFile->id]);
 
             $data = [
-                'endpoint_spreadsheet_processing_status' => $processedFile->id,
+                'endpoint_spreadsheet_processing_status' => $endpoint,
             ];
 
             return [
@@ -179,15 +171,5 @@ class ProductService implements ProductServiceInterface
                     ];
             }
         }
-    }
-
-    /**
-     * @param ProcessedFile $processedFile
-     *
-     * @return void
-     */
-    private function dispatchProcessing(ProcessedFile $processedFile): void
-    {
-        //
     }
 }

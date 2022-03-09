@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Enums\ProcessedFileStatusEnum;
+use Database\Factories\ProcessedFile\ProcessedFileFactory;
 
 class ProcessedFile extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -45,4 +48,14 @@ class ProcessedFile extends Model
         'updated_at'        => 'datetime:Y-m-d H:i:s',
         'deleted_at'        => 'datetime:Y-m-d H:i:s',
     ];
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return Factory
+     */
+    protected static function newFactory(): Factory
+    {
+        return ProcessedFileFactory::new();
+    }
 }
