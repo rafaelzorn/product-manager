@@ -49,4 +49,25 @@ abstract class BaseRepository implements BaseRepositoryInterface
     {
         return $this->model->create($attributes);
     }
+
+    /**
+     * @param array $attributes
+     * @param array $values
+     *
+     * @return Model
+     */
+    public function updateOrCreate(array $attributes, array $values = []): Model
+    {
+        return $this->model->updateOrCreate($attributes, $values);
+    }
+
+    /**
+     * @param array $attributes
+     *
+     * @return bool
+     */
+    public function update(array $attributes): bool
+    {
+        return $this->model->update($attributes);
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Imports\Queued;
 
 use Illuminate\Support\Collection;
+use App\Models\ProcessedFile;
 
 interface ImportQueuedInterface
 {
@@ -14,7 +15,24 @@ interface ImportQueuedInterface
     public function collection(Collection $rows): void;
 
     /**
+     * @return array
+     */
+    public function rules(): array;
+
+    /**
+     * @return int
+     */
+    public function headingRow(): int;
+
+    /**
+     * @param ProcessedFile $processedFile
+     *
      * @return void
      */
-    public function chunkSize(): int;
+    public function setProcessedFile($processedFile): void;
+
+    /**
+     * @return array
+     */
+    public function registerEvents(): array;
 }

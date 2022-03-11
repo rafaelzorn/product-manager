@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Database\Factories\CategoryFactory;
 use App\Models\BaseModel;
 
@@ -16,6 +14,7 @@ class Category extends BaseModel
      * @var array
      */
     protected $fillable = [
+        'id',
         'name',
     ];
 

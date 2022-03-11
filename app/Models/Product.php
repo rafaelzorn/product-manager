@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\BaseModel;
 use App\Models\Category;
@@ -19,6 +17,7 @@ class Product extends BaseModel
      * @var array
      */
     protected $fillable = [
+        'id',
         'category_id',
         'name',
         'free_shipping',

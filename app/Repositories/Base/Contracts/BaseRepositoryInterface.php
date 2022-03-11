@@ -26,4 +26,19 @@ interface BaseRepositoryInterface
      * @return Model
      */
     public function create(array $attributes): Model;
+
+    /**
+     * @param array $attributes
+     * @param array $values
+     *
+     * @return Model
+     */
+    public function updateOrCreate(array $attributes, array $values = []): Model;
+
+    /**
+     * @param array $attributes
+     *
+     * @return bool
+     */
+    public function update(array $attributes): bool;
 }

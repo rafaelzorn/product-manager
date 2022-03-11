@@ -54,7 +54,12 @@ class ProcessSpreadsheetService implements ProcessSpreadsheetServiceInterface
             'stored_filename'   => $storedFileName
         ]);
 
-        $this->excel->import($importQueued, $processedFile->stored_filename);
+        $importQueued->setProcessedFile($processedFile);
+
+        $this->excel->import(
+            $importQueued,
+            $processedFile->stored_filename
+        );
 
         return $processedFile;
     }

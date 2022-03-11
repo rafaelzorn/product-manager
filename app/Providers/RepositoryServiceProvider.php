@@ -11,6 +11,8 @@ use App\Repositories\Product\ProductRepository;
 use App\Repositories\Product\Contracts\ProductRepositoryInterface;
 use App\Repositories\ProcessedFile\ProcessedFileRepository;
 use App\Repositories\ProcessedFile\Contracts\ProcessedFileRepositoryInterface;
+use App\Repositories\ProcessedFileLog\ProcessedFileLogRepository;
+use App\Repositories\ProcessedFileLog\Contracts\ProcessedFileLogRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,13 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(BaseRepositoryInterface::class, BaseRepository::class);
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
         $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
-        $this->app->bind(ProcessedFileRepositoryInterface::class, ProcessedFileRepository::class);
+        $this->app->bind(
+            ProcessedFileRepositoryInterface::class,
+            ProcessedFileRepository::class
+        );
+        $this->app->bind(
+            ProcessedFileLogRepositoryInterface::class,
+            ProcessedFileLogRepository::class
+        );
     }
 }
