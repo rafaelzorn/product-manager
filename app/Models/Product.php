@@ -3,18 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\BaseModel;
 use App\Models\Category;
-use Database\Factories\Product\ProductFactory;
+use Database\Factories\ProductFactory;
 
-class Product extends Model
+class Product extends BaseModel
 {
-    use HasFactory, SoftDeletes;
-
     /**
      * The attributes that are mass assignable.
      *

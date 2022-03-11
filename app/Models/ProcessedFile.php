@@ -4,15 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\BaseModel;
 use App\Enums\ProcessedFileStatusEnum;
-use Database\Factories\ProcessedFile\ProcessedFileFactory;
+use Database\Factories\ProcessedFileFactory;
 
-class ProcessedFile extends Model
+class ProcessedFile extends BaseModel
 {
-    use HasFactory, SoftDeletes;
-
     /**
      * The attributes that are mass assignable.
      *

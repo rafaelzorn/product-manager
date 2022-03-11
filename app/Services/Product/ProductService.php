@@ -10,6 +10,7 @@ use App\Services\ProcessSpreadsheet\Contracts\ProcessSpreadsheetServiceInterface
 use App\Repositories\Product\Contracts\ProductRepositoryInterface;
 use App\Http\Resources\Product\ProductResource;
 use App\Constants\HttpStatusConstant;
+use App\Imports\Queued\Product\ProductImport;
 
 class ProductService implements ProductServiceInterface
 {
@@ -24,6 +25,11 @@ class ProductService implements ProductServiceInterface
     private $processSpreadsheetService;
 
     /**
+     * @var ProductImport
+     */
+    private $productImport;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param ProcessSpreadsheetServiceInterface $processSpreadsheetService
      *
@@ -31,11 +37,13 @@ class ProductService implements ProductServiceInterface
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        ProcessSpreadsheetServiceInterface $processSpreadsheetService
+        ProcessSpreadsheetServiceInterface $processSpreadsheetService,
+        ProductImport $productImport
     )
     {
         $this->productRepository         = $productRepository;
         $this->processSpreadsheetService = $processSpreadsheetService;
+        $this->productImport             = $productImport;
     }
 
     /**
@@ -60,7 +68,7 @@ class ProductService implements ProductServiceInterface
     public function importProducts(UploadedFile $spreadsheet): array
     {
         try {
-            $processedFile = $this->processSpreadsheetService->process($spreadsheet);
+            $processedFile = $this->processSpreadsheetService->process($spreadsheet, $this->productImport);
             $endpoint      = route('processed-files.show', ['id' => $processedFile->id]);
 
             $data = [

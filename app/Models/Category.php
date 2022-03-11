@@ -2,16 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Database\Factories\Category\CategoryFactory;
+use Database\Factories\CategoryFactory;
+use App\Models\BaseModel;
 
-class Category extends Model
+class Category extends BaseModel
 {
-    use HasFactory, SoftDeletes;
-
     /**
      * The attributes that are mass assignable.
      *
