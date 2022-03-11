@@ -146,7 +146,7 @@ class ProductImport implements ImportQueuedInterface, ToCollection, WithHeadingR
     {
         return [
             'lm'            => 'required|integer',
-            'name'          => 'required|integer|min:3|max:255',
+            'name'          => 'required|string|min:3|max:255',
             'free_shipping' => 'required|boolean',
             'description'   => 'required|string|min:3',
             'price'         => 'required|regex:/^\d+(\.\d{1,2})?$/',
