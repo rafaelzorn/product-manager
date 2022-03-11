@@ -3,10 +3,7 @@
 namespace App\Services\ProcessSpreadsheet;
 
 use Illuminate\Http\UploadedFile;
-use Carbon\Carbon;
-use App\Constants\EnvironmentConstant;
 use App\Services\ProcessSpreadsheet\Contracts\ProcessSpreadsheetServiceInterface;
-use App\Jobs\ProcessSpreadsheetJob;
 use App\Models\ProcessedFile;
 use App\Repositories\ProcessedFile\Contracts\ProcessedFileRepositoryInterface;
 use App\Constants\StoragePathConstant;
@@ -43,24 +40,8 @@ class ProcessSpreadsheetService implements ProcessSpreadsheetServiceInterface
             'stored_filename'   => $storedFileName
         ]);
 
-        $this->dispatchProcessSpreadsheet($processedFile);
+        // TODO: Dispatch job
 
         return $processedFile;
-    }
-
-    /**
-     * @param ProcessedFile $processedFile
-     *
-     * @return void
-     */
-    private function dispatchProcessSpreadsheet(ProcessedFile $processedFile): void
-    {
-        $job = new ProcessSpreadsheetJob($processedFile);
-
-        if (config('app.app_env') == EnvironmentConstant::LOCAL) {
-            $job->delay(Carbon::now()->addSeconds(10));
-        }
-
-        dispatch($job);
     }
 }
