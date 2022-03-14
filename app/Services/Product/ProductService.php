@@ -9,7 +9,8 @@ use App\Services\Product\Contracts\ProductServiceInterface;
 use App\Services\ProcessSpreadsheet\Contracts\ProcessSpreadsheetServiceInterface;
 use App\Repositories\Product\Contracts\ProductRepositoryInterface;
 use App\Http\Resources\Product\ProductResource;
-use App\Jobs\Imports\Product\Factory\ProductImportJobFactory;
+use App\Jobs\Imports\Factory\ImportFactoryJob;
+use App\Jobs\Imports\Product\ProductImportJob;
 use App\Constants\HttpStatusConstant;
 
 class ProductService implements ProductServiceInterface
@@ -25,9 +26,9 @@ class ProductService implements ProductServiceInterface
     private $processSpreadsheetService;
 
     /**
-     * @var ProductImportJobFactory
+     * @var ImportFactoryJob
      */
-    private $productImportJobFactory;
+    private $importFactoryJob;
 
     /**
      * @param ProductRepositoryInterface $productRepository
@@ -39,12 +40,12 @@ class ProductService implements ProductServiceInterface
     public function __construct(
         ProductRepositoryInterface $productRepository,
         ProcessSpreadsheetServiceInterface $processSpreadsheetService,
-        ProductImportJobFactory $productImportJobFactory
+        ImportFactoryJob $importFactoryJob
     )
     {
         $this->productRepository         = $productRepository;
         $this->processSpreadsheetService = $processSpreadsheetService;
-        $this->productImportJobFactory   = $productImportJobFactory;
+        $this->importFactoryJob          = $importFactoryJob;
     }
 
     /**
@@ -69,9 +70,11 @@ class ProductService implements ProductServiceInterface
     public function importProducts(UploadedFile $spreadsheet): array
     {
         try {
+            $this->importFactoryJob->setClass(ProductImportJob::class);
+
             $processedFile = $this->processSpreadsheetService->process(
                 $spreadsheet,
-                $this->productImportJobFactory
+                $this->importFactoryJob
             );
 
             $endpoint = route('processed-files.show', ['id' => $processedFile->id]);

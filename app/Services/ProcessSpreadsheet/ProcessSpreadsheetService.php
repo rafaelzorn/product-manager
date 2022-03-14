@@ -8,7 +8,7 @@ use App\Services\ProcessSpreadsheet\Contracts\ProcessSpreadsheetServiceInterface
 use App\Models\ProcessedFile;
 use App\Repositories\ProcessedFile\Contracts\ProcessedFileRepositoryInterface;
 use App\Constants\StoragePathConstant;
-use App\Jobs\Imports\Factory\Contracts\ImportFactoryJobInterface;
+use App\Jobs\Imports\Factory\ImportFactoryJob;
 
 class ProcessSpreadsheetService implements ProcessSpreadsheetServiceInterface
 {
@@ -39,11 +39,11 @@ class ProcessSpreadsheetService implements ProcessSpreadsheetServiceInterface
 
     /**
      * @param UploadedFile $spreadsheet
-     * @param ImportFactoryJobInterface $importFactoryJob
+     * @param ImportFactoryJob $importFactoryJob
      *
      * @return ProcessedFile
      */
-    public function process(UploadedFile $spreadsheet, ImportFactoryJobInterface $importFactoryJob): ProcessedFile
+    public function process(UploadedFile $spreadsheet, ImportFactoryJob $importFactoryJob): ProcessedFile
     {
         $originalFileName = $spreadsheet->getClientOriginalName();
         $storedFileName   = $spreadsheet->store(StoragePathConstant::IMPORTED_SPREADSHEETS);

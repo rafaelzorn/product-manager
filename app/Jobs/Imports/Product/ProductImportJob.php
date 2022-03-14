@@ -36,6 +36,6 @@ class ProductImportJob implements ShouldQueue
      */
     public function handle()
     {
-        dd($this->processedFile);
+        //
     }
 }
