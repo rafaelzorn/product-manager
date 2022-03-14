@@ -3,13 +3,12 @@
 namespace App\Services\ProcessSpreadsheet;
 
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Excel;
 use App\Services\ProcessSpreadsheet\Contracts\ProcessSpreadsheetServiceInterface;
 use App\Models\ProcessedFile;
 use App\Repositories\ProcessedFile\Contracts\ProcessedFileRepositoryInterface;
 use App\Constants\StoragePathConstant;
-use App\Imports\Queued\ImportQueuedInterface;
+use App\Jobs\Imports\Factory\Contracts\ImportFactoryJobInterface;
 
 class ProcessSpreadsheetService implements ProcessSpreadsheetServiceInterface
 {
@@ -40,11 +39,11 @@ class ProcessSpreadsheetService implements ProcessSpreadsheetServiceInterface
 
     /**
      * @param UploadedFile $spreadsheet
-     * @param ImportQueuedInterface $import
+     * @param ImportFactoryJobInterface $importFactoryJob
      *
      * @return ProcessedFile
      */
-    public function process(UploadedFile $spreadsheet, ImportQueuedInterface $importQueued): ProcessedFile
+    public function process(UploadedFile $spreadsheet, ImportFactoryJobInterface $importFactoryJob): ProcessedFile
     {
         $originalFileName = $spreadsheet->getClientOriginalName();
         $storedFileName   = $spreadsheet->store(StoragePathConstant::IMPORTED_SPREADSHEETS);
@@ -54,12 +53,7 @@ class ProcessSpreadsheetService implements ProcessSpreadsheetServiceInterface
             'stored_filename'   => $storedFileName
         ]);
 
-        $importQueued->setProcessedFile($processedFile);
-
-        $this->excel->import(
-            $importQueued,
-            $processedFile->stored_filename
-        );
+        dispatch($importFactoryJob->create($processedFile));
 
         return $processedFile;
     }

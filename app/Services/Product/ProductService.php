@@ -9,8 +9,8 @@ use App\Services\Product\Contracts\ProductServiceInterface;
 use App\Services\ProcessSpreadsheet\Contracts\ProcessSpreadsheetServiceInterface;
 use App\Repositories\Product\Contracts\ProductRepositoryInterface;
 use App\Http\Resources\Product\ProductResource;
+use App\Jobs\Imports\Product\Factory\ProductImportJobFactory;
 use App\Constants\HttpStatusConstant;
-use App\Imports\Queued\Product\ProductImport;
 
 class ProductService implements ProductServiceInterface
 {
@@ -25,25 +25,26 @@ class ProductService implements ProductServiceInterface
     private $processSpreadsheetService;
 
     /**
-     * @var ProductImport
+     * @var ProductImportJobFactory
      */
-    private $productImport;
+    private $productImportJobFactory;
 
     /**
      * @param ProductRepositoryInterface $productRepository
      * @param ProcessSpreadsheetServiceInterface $processSpreadsheetService
+     * @param ProductImportJobFactory $productImportJobFactory
      *
      * @return void
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         ProcessSpreadsheetServiceInterface $processSpreadsheetService,
-        ProductImport $productImport
+        ProductImportJobFactory $productImportJobFactory
     )
     {
         $this->productRepository         = $productRepository;
         $this->processSpreadsheetService = $processSpreadsheetService;
-        $this->productImport             = $productImport;
+        $this->productImportJobFactory   = $productImportJobFactory;
     }
 
     /**
@@ -68,8 +69,12 @@ class ProductService implements ProductServiceInterface
     public function importProducts(UploadedFile $spreadsheet): array
     {
         try {
-            $processedFile = $this->processSpreadsheetService->process($spreadsheet, $this->productImport);
-            $endpoint      = route('processed-files.show', ['id' => $processedFile->id]);
+            $processedFile = $this->processSpreadsheetService->process(
+                $spreadsheet,
+                $this->productImportJobFactory
+            );
+
+            $endpoint = route('processed-files.show', ['id' => $processedFile->id]);
 
             $data = [
                 'endpoint_spreadsheet_processing_status' => $endpoint,

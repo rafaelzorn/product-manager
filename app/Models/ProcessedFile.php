@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\BaseModel;
 use App\Enums\ProcessedFileStatusEnum;
 use Database\Factories\ProcessedFileFactory;
