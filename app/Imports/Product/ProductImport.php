@@ -62,7 +62,7 @@ class ProductImport extends BaseImport
         return [
             BeforeImport::class => function(BeforeImport $event) {
                 $this->updateStatusFileProcessed(ProcessedFileStatusEnum::Processing);
-                $this->updateOrCreateCategory($event);
+                $this->createCategory($event);
             },
 
             AfterImport::class => function(AfterImport $event) {
@@ -76,7 +76,7 @@ class ProductImport extends BaseImport
      *
      * @return void
      */
-    private function updateOrCreateCategory(BeforeImport $event): void
+    private function createCategory(BeforeImport $event): void
     {
         $activeSheet = $event->reader->getActiveSheet();
         $category    = [
@@ -86,7 +86,7 @@ class ProductImport extends BaseImport
 
         $this->validateCategory($category);
 
-        $this->category = $this->categoryRepository->updateOrCreate(
+        $this->category = $this->categoryRepository->firstOrCreate(
             ['id'   => $category['category_id']],
             ['name' => $category['category_name']]
         );
@@ -135,7 +135,7 @@ class ProductImport extends BaseImport
     public function collection(Collection $rows): void
     {
         foreach ($rows as $row) {
-            $this->updateOrCreateProduct($row);
+            $this->createProduct($row);
         }
     }
 
@@ -144,7 +144,7 @@ class ProductImport extends BaseImport
      *
      * @return void
      */
-    private function updateOrCreateProduct(mixed $row): void
+    private function createProduct(mixed $row): void
     {
         $product = [
             'id'            => $row['lm'],
@@ -155,6 +155,6 @@ class ProductImport extends BaseImport
             'price'         => $row['price'],
         ];
 
-        $this->productRepository->updateOrCreate(['id' => $product['id']], $product);
+        $this->productRepository->firstOrCreate(['id' => $product['id']], $product);
     }
 }

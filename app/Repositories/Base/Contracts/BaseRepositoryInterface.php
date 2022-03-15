@@ -33,7 +33,7 @@ interface BaseRepositoryInterface
      *
      * @return Model
      */
-    public function updateOrCreate(array $attributes, array $values = []): Model;
+    public function firstOrCreate(array $attributes, array $values = []): Model;
 
     /**
      * @param array $attributes
