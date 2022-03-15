@@ -6,8 +6,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Events\BeforeImport;
 use Maatwebsite\Excel\Events\AfterImport;
-use Maatwebsite\Excel\Events\ImportFailed;
-use App\Repositories\ProcessedFileLog\Contracts\ProcessedFileLogRepositoryInterface;
 use App\Models\Category;
 use App\Imports\Base\BaseImport;
 use App\Enums\ProcessedFileStatusEnum;
@@ -34,19 +32,16 @@ class ProductImport extends BaseImport
     /**
      * @param ProductRepositoryInterface $productRepository
      * @param CategoryRepositoryInterface $categoryRepository
-     * @param ProcessedFileLogRepositoryInterface $processedFileLogRepository
      *
      * @return void
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        CategoryRepositoryInterface $categoryRepository,
-        ProcessedFileLogRepositoryInterface $processedFileLogRepository
+        CategoryRepositoryInterface $categoryRepository
     )
     {
-        $this->productRepository          = $productRepository;
-        $this->categoryRepository         = $categoryRepository;
-        $this->processedFileLogRepository = $processedFileLogRepository;
+        $this->productRepository  = $productRepository;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -72,10 +67,6 @@ class ProductImport extends BaseImport
 
             AfterImport::class => function(AfterImport $event) {
                 $this->afterImport();
-            },
-
-            ImportFailed::class => function(ImportFailed $event) {
-                $this->importFailed($event);
             },
         ];
     }

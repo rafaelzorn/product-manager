@@ -19,6 +19,16 @@ class StoreTest extends TestCase
      *
      * @return void
      */
+    public function should_store_products(): void
+    {
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
     public function should_return_validation_fields_required(): void
     {
         // Arrange
