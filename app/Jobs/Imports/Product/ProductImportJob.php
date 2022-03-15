@@ -2,17 +2,18 @@
 
 namespace App\Jobs\Imports\Product;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Exception;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Jobs\Imports\Base\BaseImportJob;
 use App\Models\ProcessedFile;
+use App\Imports\Product\ProductImport;
 
-class ProductImportJob implements ShouldQueue
+class ProductImportJob extends BaseImportJob
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    /**
+     * @var ProductImport
+     */
+    private $productImport;
 
     /**
      * @var ProcessedFile
@@ -34,8 +35,25 @@ class ProductImportJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(ProductImport $productImport): void
     {
-        //
+        $this->productImport = $productImport;
+
+        $this->import();
+    }
+
+    /**
+     * @return void
+     */
+    private function import(): void
+    {
+        try {
+            $this->productImport->setProcessedFile($this->processedFile);
+
+            Excel::import(
+                $this->productImport,
+                $this->processedFile->stored_filename
+            );
+        } catch (Exception $e) {}
     }
 }
