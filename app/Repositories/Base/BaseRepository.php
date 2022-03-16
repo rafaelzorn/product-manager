@@ -70,4 +70,12 @@ abstract class BaseRepository implements BaseRepositoryInterface
     {
         return $this->model->update($attributes);
     }
+
+    /**
+     * @return Model
+     */
+    public function first(): Model
+    {
+        return $this->model->first();
+    }
 }

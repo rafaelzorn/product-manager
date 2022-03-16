@@ -41,4 +41,9 @@ interface BaseRepositoryInterface
      * @return bool
      */
     public function update(array $attributes): bool;
+
+    /**
+     * @return Model
+     */
+    public function first(): Model;
 }

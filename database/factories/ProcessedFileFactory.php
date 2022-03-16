@@ -23,13 +23,10 @@ class ProcessedFileFactory extends Factory
      */
     public function definition(): array
     {
-        $processedFileStatus      = ProcessedFileStatusEnum::cases();
-        $totalProcessedFileStatus = count($processedFileStatus);
-
         return [
             'original_filename' => Str::random(74),
             'stored_filename'   => Str::random(120),
-            'status'            => $processedFileStatus[rand(0, $totalProcessedFileStatus)]->value,
+            'status'            => $this->faker->randomElement(ProcessedFileStatusEnum::cases()),
         ];
     }
 }
