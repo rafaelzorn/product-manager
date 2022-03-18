@@ -46,4 +46,16 @@ interface BaseRepositoryInterface
      * @return Model
      */
     public function first(): Model;
+
+    /**
+     * @return int
+     */
+    public function count(): int;
+
+    /**
+     * @param int $id
+     *
+     * @return Model
+     */
+    public function find(int $id): Model;
 }

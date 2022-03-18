@@ -78,4 +78,22 @@ abstract class BaseRepository implements BaseRepositoryInterface
     {
         return $this->model->first();
     }
+
+    /**
+     * @return int
+     */
+    public function count(): int
+    {
+        return $this->model->count();
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return Model
+     */
+    public function find(int $id): Model
+    {
+        return $this->model->find($id);
+    }
 }
