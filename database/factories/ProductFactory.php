@@ -17,6 +17,34 @@ class ProductFactory extends Factory
      */
     protected $model = Product::class;
 
+     /**
+     * @param int $categoryId
+     *
+     * @return Factory
+     */
+    public function categoryId(int $categoryId): Factory
+    {
+        return $this->state(function (array $attributes) use($categoryId) {
+            return [
+                'category_id' => $categoryId,
+            ];
+        });
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return Factory
+     */
+    public function id(string $id): Factory
+    {
+        return $this->state(function (array $attributes) use($id) {
+            return [
+                'id' => $id,
+            ];
+        });
+    }
+
     /**
      * Define the model's default state.
      *

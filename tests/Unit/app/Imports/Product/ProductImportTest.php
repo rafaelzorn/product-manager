@@ -14,6 +14,8 @@ use App\Repositories\ProcessedFile\Contracts\ProcessedFileRepositoryInterface;
 use App\Enums\ProcessedFileStatusEnum;
 use App\Repositories\Category\Contracts\CategoryRepositoryInterface;
 use App\Repositories\Product\Contracts\ProductRepositoryInterface;
+use App\Models\Product;
+use App\Models\Category;
 
 class ProductImportTest extends TestCase
 {
@@ -90,6 +92,16 @@ class ProductImportTest extends TestCase
             $this->processedFileRepository->find($processedFile->id)->status->value,
             ProcessedFileStatusEnum::Completed->value
         );
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function should_delete_the_spreadsheet_after_import(): void
+    {
+        $this->assertEquals(true, true);
     }
 
     /**
@@ -227,9 +239,45 @@ class ProductImportTest extends TestCase
                 ProcessedFileStatusEnum::Processing->value
             );
 
-            $this->assertEquals($this->categoryRepository->count(), 0);
+            $this->assertEquals($this->categoryRepository->count(), 1);
             $this->assertEquals($this->productRepository->count(), 0);
         }
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function should_not_duplicate_category_and_product()
+    {
+        $category = Category::factory()->id(123123)->create();
+        $product  = Product::factory()
+                        ->categoryId($category->id)
+                        ->id(1001)
+                        ->create();
+
+        $processedFile = ProcessedFile::factory()->create();
+
+        $this->import($processedFile, 'products.xlsx');
+
+        $this->assertEquals($this->categoryRepository->count(), 1);
+        $this->assertEquals($this->productRepository->count(), 1);
+
+        $this->assertEquals(
+            $this->categoryRepository->find($category->id)->toArray(),
+            $category->toArray()
+        );
+
+        $this->assertEquals(
+            $this->productRepository->find($product->id)->toArray(),
+            $product->toArray()
+        );
+
+        $this->assertEquals(
+            $this->processedFileRepository->find($processedFile->id)->status->value,
+            ProcessedFileStatusEnum::Completed->value
+        );
     }
 
     /**

@@ -6,7 +6,6 @@ use Tests\TestCase;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Storage;
 use App\Repositories\ProcessedFile\Contracts\ProcessedFileRepositoryInterface;
 use App\Jobs\Imports\Product\ProductImportJob;
 use App\Constants\HttpStatusConstant;
@@ -38,7 +37,6 @@ class StoreTest extends TestCase
     {
         // Arrange
         Bus::fake();
-        Storage::fake('imported-spreadsheets');
 
         $file = UploadedFile::fake()->create('products.xlsx', 16);
 
@@ -91,8 +89,6 @@ class StoreTest extends TestCase
     public function should_return_validation_mimes(): void
     {
         // Arrange
-        Storage::fake('imported-spreadsheets');
-
         $file = UploadedFile::fake()->create('products.xls', 16);
 
         $validations = [

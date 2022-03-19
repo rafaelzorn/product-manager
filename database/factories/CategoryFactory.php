@@ -15,6 +15,20 @@ class CategoryFactory extends Factory
     protected $model = Category::class;
 
     /**
+     * @param string $id
+     *
+     * @return Factory
+     */
+    public function id(string $id): Factory
+    {
+        return $this->state(function (array $attributes) use($id) {
+            return [
+                'id' => $id,
+            ];
+        });
+    }
+
+    /**
      * Define the model's default state.
      *
      * @return array
