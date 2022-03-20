@@ -5,9 +5,9 @@ namespace Tests\Integration\app\Http\Controllers\Api\V1\Product\ProductControlle
 use Tests\TestCase;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Repositories\ProcessedFile\Contracts\ProcessedFileRepositoryInterface;
-use App\Jobs\Imports\Product\ProductImportJob;
 use App\Constants\HttpStatusConstant;
 
 class StoreTest extends TestCase
@@ -25,6 +25,8 @@ class StoreTest extends TestCase
     {
         parent::setUp();
 
+        Storage::fake('local');
+
         $this->processedFileRepository = $this->app->make(ProcessedFileRepositoryInterface::class);
     }
 
@@ -38,7 +40,7 @@ class StoreTest extends TestCase
         // Arrange
         Bus::fake();
 
-        $file = UploadedFile::fake()->create('products.xlsx', 16);
+        $file = UploadedFile::fake()->create('products.xlsx');
 
         // Act
         $response = $this->postJson(self::ENDPOINT, ['spreadsheet' => $file]);
@@ -57,8 +59,6 @@ class StoreTest extends TestCase
             'data'    => $data,
             'message' => trans('messages.spreadsheet_sent_for_processing')
         ]);
-
-        Bus::assertDispatched(ProductImportJob::class);
     }
 
     /**
@@ -89,7 +89,7 @@ class StoreTest extends TestCase
     public function should_return_validation_mimes(): void
     {
         // Arrange
-        $file = UploadedFile::fake()->create('products.xls', 16);
+        $file = UploadedFile::fake()->create('products.xls');
 
         $validations = [
             'spreadsheet' => trans('validation.mimes', ['values' => 'xlsx']),

@@ -17,7 +17,7 @@ class ProductFactory extends Factory
      */
     protected $model = Product::class;
 
-     /**
+    /**
      * @param int $categoryId
      *
      * @return Factory
