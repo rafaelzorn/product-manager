@@ -11,8 +11,8 @@ use App\Repositories\Category\Contracts\CategoryRepositoryInterface;
 use App\Jobs\Imports\Product\ProductImportJob;
 use App\Repositories\ProcessedFile\Contracts\ProcessedFileRepositoryInterface;
 use App\Repositories\ProcessedFileLog\Contracts\ProcessedFileLogRepositoryInterface;
-use App\Models\ProcessedFile;
 use App\Enums\ProcessedFileStatusEnum;
+use Tests\Helpers\ProcessedFileHelper;
 
 class ProductImportJobTest extends TestCase
 {
@@ -60,7 +60,11 @@ class ProductImportJobTest extends TestCase
      */
     public function should_import_products(): void
     {
-        $processedFile = $this->createProcessedFile('products.xlsx');
+        $processedFile = ProcessedFileHelper::createProcessedFile(
+            'products.xlsx',
+            'tests/Stubs/ImportedSpreadsheet/Product/',
+            'imported-spreadsheets'
+        );
 
         ProductImportJob::dispatchNow($processedFile);
 
@@ -82,7 +86,11 @@ class ProductImportJobTest extends TestCase
      */
     public function should_create_processed_file_log(): void
     {
-        $processedFile = $this->createProcessedFile('products_validations.xlsx');
+        $processedFile = ProcessedFileHelper::createProcessedFile(
+            'products_validations.xlsx',
+            'tests/Stubs/ImportedSpreadsheet/Product/',
+            'imported-spreadsheets'
+        );
 
         ProductImportJob::dispatchNow($processedFile);
 
@@ -96,22 +104,5 @@ class ProductImportJobTest extends TestCase
         );
 
         Storage::disk('local')->assertMissing($processedFile->stored_filename);
-    }
-
-    /**
-     * @param string $originalFileName
-     *
-     * @return ProcessedFile $processedFile
-     */
-    private function createProcessedFile(string $originalFileName): ProcessedFile
-    {
-        $stubFilePath = "tests/Stubs/ImportedSpreadsheet/Product/{$originalFileName}";
-        $storePath    = 'imported-spreadsheets';
-
-        $processedFile = ProcessedFile::factory()
-                            ->storedFile($originalFileName, $stubFilePath, $storePath)
-                            ->create();
-
-        return $processedFile;
     }
 }

@@ -9,7 +9,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Validators\ValidationException as MaatwebsiteValidationException;
 use Maatwebsite\Excel\Excel;
-use Tests\Constants\PathConstant;
 use App\Models\Category;
 use App\Models\Product;
 use App\Repositories\Product\Contracts\ProductRepositoryInterface;
@@ -18,6 +17,7 @@ use App\Repositories\ProcessedFile\Contracts\ProcessedFileRepositoryInterface;
 use App\Imports\Product\ProductImport;
 use App\Enums\ProcessedFileStatusEnum;
 use App\Models\ProcessedFile;
+use Tests\Helpers\ProcessedFileHelper;
 
 class ProductImportTest extends TestCase
 {
@@ -71,7 +71,12 @@ class ProductImportTest extends TestCase
      */
     public function should_import_products(): void
     {
-        $processedFile = $this->createProcessedFile('products.xlsx');
+        $processedFile = ProcessedFileHelper::createProcessedFile(
+            'products.xlsx',
+            'tests/Stubs/ImportedSpreadsheet/Product/',
+            'imported-spreadsheets'
+        );
+
         $this->import($processedFile);
 
         $this->assertEquals($this->categoryRepository->count(), 1);
@@ -115,7 +120,12 @@ class ProductImportTest extends TestCase
                         ->id(1001)
                         ->create();
 
-        $processedFile = $this->createProcessedFile('products.xlsx');
+        $processedFile = ProcessedFileHelper::createProcessedFile(
+            'products.xlsx',
+            'tests/Stubs/ImportedSpreadsheet/Product/',
+            'imported-spreadsheets'
+        );
+
         $this->import($processedFile);
 
         $this->assertEquals($this->categoryRepository->count(), 1);
@@ -147,7 +157,12 @@ class ProductImportTest extends TestCase
     public function should_throw_exception_of_required_fields_of_the_category(): void
     {
         try {
-            $processedFile = $this->createProcessedFile('category_required_fields.xlsx');
+            $processedFile = ProcessedFileHelper::createProcessedFile(
+                'category_required_fields.xlsx',
+                'tests/Stubs/ImportedSpreadsheet/Product/',
+                'imported-spreadsheets'
+            );
+
             $this->import($processedFile);
         } catch (Exception $e) {
             $this->assertEquals(get_class($e), ValidationException::class);
@@ -174,7 +189,12 @@ class ProductImportTest extends TestCase
     public function should_throw_exception_of_types_fields_of_the_category(): void
     {
         try {
-            $processedFile = $this->createProcessedFile('category_fields_types.xlsx');
+            $processedFile = ProcessedFileHelper::createProcessedFile(
+                'category_fields_types.xlsx',
+                'tests/Stubs/ImportedSpreadsheet/Product/',
+                'imported-spreadsheets'
+            );
+
             $this->import($processedFile);
         } catch (Exception $e) {
             $this->assertEquals(get_class($e), ValidationException::class);
@@ -201,7 +221,12 @@ class ProductImportTest extends TestCase
     public function should_throw_exception_of_the_minimum_amount_of_characters_of_the_category_name()
     {
         try {
-            $processedFile = $this->createProcessedFile('category_name_minimum_caracteres.xlsx');
+            $processedFile = ProcessedFileHelper::createProcessedFile(
+                'category_name_minimum_caracteres.xlsx',
+                'tests/Stubs/ImportedSpreadsheet/Product/',
+                'imported-spreadsheets'
+            );
+
             $this->import($processedFile);
         } catch (Exception $e) {
             $this->assertEquals(get_class($e), ValidationException::class);
@@ -228,7 +253,12 @@ class ProductImportTest extends TestCase
     public function should_throw_exception_of_the_maximum_amount_of_characters_of_the_category_name()
     {
         try {
-            $processedFile = $this->createProcessedFile('category_name_maximum_caracteres.xlsx');
+            $processedFile = ProcessedFileHelper::createProcessedFile(
+                'category_name_maximum_caracteres.xlsx',
+                'tests/Stubs/ImportedSpreadsheet/Product/',
+                'imported-spreadsheets'
+            );
+
             $this->import($processedFile);
         } catch (Exception $e) {
             $this->assertEquals(get_class($e), ValidationException::class);
@@ -255,7 +285,12 @@ class ProductImportTest extends TestCase
     public function should_throw_exception_of_product_field_validation()
     {
         try {
-            $processedFile = $this->createProcessedFile('products_validations.xlsx');
+            $processedFile = ProcessedFileHelper::createProcessedFile(
+                'products_validations.xlsx',
+                'tests/Stubs/ImportedSpreadsheet/Product/',
+                'imported-spreadsheets'
+            );
+
             $this->import($processedFile);
         } catch (Exception $e) {
             $this->assertEquals(get_class($e), MaatwebsiteValidationException::class);
@@ -272,23 +307,6 @@ class ProductImportTest extends TestCase
             $this->assertEquals($this->categoryRepository->count(), 1);
             $this->assertEquals($this->productRepository->count(), 0);
         }
-    }
-
-    /**
-     * @param string $originalFileName
-     *
-     * @return ProcessedFile $processedFile
-     */
-    private function createProcessedFile(string $originalFileName): ProcessedFile
-    {
-        $stubFilePath = "tests/Stubs/ImportedSpreadsheet/Product/{$originalFileName}";
-        $storePath    = 'imported-spreadsheets';
-
-        $processedFile = ProcessedFile::factory()
-                            ->storedFile($originalFileName, $stubFilePath, $storePath)
-                            ->create();
-
-        return $processedFile;
     }
 
     /**
