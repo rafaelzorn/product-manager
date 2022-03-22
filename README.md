@@ -39,10 +39,47 @@ When running the ``installer.sh`` script it will execute the following commands:
 
 ## Endpoints
 
-##### Payload Examples
+#### Products
+
+```
+    GET localhost:8000/api/v1/products
+```
+```
+    POST localhost:8000/api/v1/products
+    
+    # Exemplo Payload
+    {
+	    "spreadsheet": products.xlsx,
+    }
+```
+```
+    GET localhost:8000/api/v1/products/1001
+```
+```
+    PUT localhost:8000/api/v1/products/1001
+    
+    # Exemplo Payload
+    {
+	    "category_id": 123123,
+	    "name": "Furadeira X",
+	    "free_shipping": 0,
+	    "description": "Furadeira eficiente X",
+	    "price": 100.00
+    }
+```
+```
+    DELETE localhost:8000/api/v1/products/1001
+```
+
+#### Processed Files
+
+```
+    GET localhost:8000/api/v1/processed-files/414
+```
 
 ## Technologies Used
 
 - [Laravel 9.2](https://laravel.com/)
 - [RabbitMQ](https://www.rabbitmq.com/)
 - [RabbitMQ Queue driver for Laravel](https://github.com/vyuldashev/laravel-queue-rabbitmq)
+- [Laravel Excel](https://laravel-excel.com/)
