@@ -13,6 +13,8 @@ use App\Repositories\ProcessedFile\Contracts\ProcessedFileRepositoryInterface;
 use App\Repositories\ProcessedFileLog\Contracts\ProcessedFileLogRepositoryInterface;
 use App\Enums\ProcessedFileStatusEnum;
 use Tests\Helpers\ProcessedFileHelper;
+use Tests\Constants\StubPathConstant;
+use App\Constants\StoragePathConstant;
 
 class ProductImportJobTest extends TestCase
 {
@@ -62,8 +64,8 @@ class ProductImportJobTest extends TestCase
     {
         $processedFile = ProcessedFileHelper::createProcessedFile(
             'products.xlsx',
-            'tests/Stubs/ImportedSpreadsheet/Product/',
-            'imported-spreadsheets'
+            StubPathConstant::IMPORTED_SPREADSHEETS_PRODUCT,
+            StoragePathConstant::IMPORTED_SPREADSHEETS
         );
 
         ProductImportJob::dispatchNow($processedFile);
@@ -88,8 +90,8 @@ class ProductImportJobTest extends TestCase
     {
         $processedFile = ProcessedFileHelper::createProcessedFile(
             'products_validations.xlsx',
-            'tests/Stubs/ImportedSpreadsheet/Product/',
-            'imported-spreadsheets'
+            StubPathConstant::IMPORTED_SPREADSHEETS_PRODUCT,
+            StoragePathConstant::IMPORTED_SPREADSHEETS
         );
 
         ProductImportJob::dispatchNow($processedFile);

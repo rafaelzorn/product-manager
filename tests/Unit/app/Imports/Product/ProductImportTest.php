@@ -18,6 +18,8 @@ use App\Imports\Product\ProductImport;
 use App\Enums\ProcessedFileStatusEnum;
 use App\Models\ProcessedFile;
 use Tests\Helpers\ProcessedFileHelper;
+use Tests\Constants\StubPathConstant;
+use App\Constants\StoragePathConstant;
 
 class ProductImportTest extends TestCase
 {
@@ -73,8 +75,8 @@ class ProductImportTest extends TestCase
     {
         $processedFile = ProcessedFileHelper::createProcessedFile(
             'products.xlsx',
-            'tests/Stubs/ImportedSpreadsheet/Product/',
-            'imported-spreadsheets'
+            StubPathConstant::IMPORTED_SPREADSHEETS_PRODUCT,
+            StoragePathConstant::IMPORTED_SPREADSHEETS
         );
 
         $this->import($processedFile);
@@ -122,8 +124,8 @@ class ProductImportTest extends TestCase
 
         $processedFile = ProcessedFileHelper::createProcessedFile(
             'products.xlsx',
-            'tests/Stubs/ImportedSpreadsheet/Product/',
-            'imported-spreadsheets'
+            StubPathConstant::IMPORTED_SPREADSHEETS_PRODUCT,
+            StoragePathConstant::IMPORTED_SPREADSHEETS
         );
 
         $this->import($processedFile);
@@ -159,8 +161,8 @@ class ProductImportTest extends TestCase
         try {
             $processedFile = ProcessedFileHelper::createProcessedFile(
                 'category_required_fields.xlsx',
-                'tests/Stubs/ImportedSpreadsheet/Product/',
-                'imported-spreadsheets'
+                StubPathConstant::IMPORTED_SPREADSHEETS_PRODUCT,
+                StoragePathConstant::IMPORTED_SPREADSHEETS
             );
 
             $this->import($processedFile);
@@ -191,8 +193,8 @@ class ProductImportTest extends TestCase
         try {
             $processedFile = ProcessedFileHelper::createProcessedFile(
                 'category_fields_types.xlsx',
-                'tests/Stubs/ImportedSpreadsheet/Product/',
-                'imported-spreadsheets'
+                StubPathConstant::IMPORTED_SPREADSHEETS_PRODUCT,
+                StoragePathConstant::IMPORTED_SPREADSHEETS
             );
 
             $this->import($processedFile);
@@ -223,8 +225,8 @@ class ProductImportTest extends TestCase
         try {
             $processedFile = ProcessedFileHelper::createProcessedFile(
                 'category_name_minimum_caracteres.xlsx',
-                'tests/Stubs/ImportedSpreadsheet/Product/',
-                'imported-spreadsheets'
+                StubPathConstant::IMPORTED_SPREADSHEETS_PRODUCT,
+                StoragePathConstant::IMPORTED_SPREADSHEETS
             );
 
             $this->import($processedFile);
@@ -255,8 +257,8 @@ class ProductImportTest extends TestCase
         try {
             $processedFile = ProcessedFileHelper::createProcessedFile(
                 'category_name_maximum_caracteres.xlsx',
-                'tests/Stubs/ImportedSpreadsheet/Product/',
-                'imported-spreadsheets'
+                StubPathConstant::IMPORTED_SPREADSHEETS_PRODUCT,
+                StoragePathConstant::IMPORTED_SPREADSHEETS
             );
 
             $this->import($processedFile);
@@ -287,8 +289,8 @@ class ProductImportTest extends TestCase
         try {
             $processedFile = ProcessedFileHelper::createProcessedFile(
                 'products_validations.xlsx',
-                'tests/Stubs/ImportedSpreadsheet/Product/',
-                'imported-spreadsheets'
+                StubPathConstant::IMPORTED_SPREADSHEETS_PRODUCT,
+                StoragePathConstant::IMPORTED_SPREADSHEETS
             );
 
             $this->import($processedFile);

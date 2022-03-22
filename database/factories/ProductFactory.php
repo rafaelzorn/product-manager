@@ -32,11 +32,11 @@ class ProductFactory extends Factory
     }
 
     /**
-     * @param string $id
+     * @param int $id
      *
      * @return Factory
      */
-    public function id(string $id): Factory
+    public function id(int $id): Factory
     {
         return $this->state(function (array $attributes) use($id) {
             return [

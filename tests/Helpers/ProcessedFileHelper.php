@@ -16,7 +16,6 @@ class ProcessedFileHelper
     public static function createProcessedFile(string $originalFileName, string $stubFilePath, string $storePath): ProcessedFile
     {
         $stubFilePath = "{$stubFilePath}{$originalFileName}";
-        $storePath    = 'imported-spreadsheets';
 
         $processedFile = ProcessedFile::factory()
                             ->storedFile($originalFileName, $stubFilePath, $storePath)
