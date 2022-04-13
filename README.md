@@ -1,6 +1,6 @@
 <h1 align="center">Product Manager</h1>
 
-Leroy Merlin PHP Backend Technical Challenge for study purposes.
+Leroy Merlin PHP Backend Technical Challenge for study purposes, the project consists of managing a register of products through an API.
 
 ##
 
