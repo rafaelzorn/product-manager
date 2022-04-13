@@ -1,6 +1,6 @@
 <h1 align="center">Product Manager</h1>
 
-Simple project to test Laravel 9.2, the project consists of managing a register of products through an API.
+Leroy Merlin PHP Backend Technical Challenge for study purposes.
 
 ##
 
